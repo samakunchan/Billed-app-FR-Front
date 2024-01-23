@@ -23,6 +23,8 @@ const rows = (data) => {
   return data && data.length ? data.map((bill) => row(bill)).join('') : '';
 };
 
+const antiChrono = (a, b) => (a.date < b.date ? 1 : -1);
+
 export default ({ data: bills, loading, error }) => {
   const modal = () => `
     <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -68,7 +70,7 @@ export default ({ data: bills, loading, error }) => {
               </tr>
           </thead>
           <tbody data-testid="tbody">
-            ${rows(bills)}
+            ${rows(bills.sort(antiChrono))}
           </tbody>
           </table>
         </div>

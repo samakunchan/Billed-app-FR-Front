@@ -1,6 +1,8 @@
 import { ROUTES_PATH } from '../constants/routes.js';
 import Logout from './Logout.js';
 
+const isPicture = (mimeType) => ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'].includes(mimeType);
+
 export default class NewBill {
   constructor({ document, onNavigate, store, localStorage }) {
     this.document = document;
@@ -25,21 +27,24 @@ export default class NewBill {
     formData.append('file', file);
     formData.append('email', email);
 
-    this.store
-      .bills()
-      .create({
-        data: formData,
-        headers: {
-          noContentType: true,
-        },
-      })
-      .then(({ fileUrl, key }) => {
-        console.log(fileUrl);
-        this.billId = key;
-        this.fileUrl = fileUrl;
-        this.fileName = fileName;
-      })
-      .catch((error) => console.error(error));
+    if (isPicture(file.type)) {
+      this.store
+        .bills()
+        .create({
+          data: formData,
+          headers: {
+            noContentType: true,
+          },
+        })
+        .then(({ fileUrl, key }) => {
+          console.log(`Voici le fichier : ${fileUrl}`);
+          this.billId = key;
+          this.fileUrl = fileUrl;
+          this.fileName = fileName;
+        })
+        .catch((error) => console.error(error));
+    }
+
   };
   handleSubmit = (e) => {
     e.preventDefault();

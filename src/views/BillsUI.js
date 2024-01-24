@@ -18,12 +18,11 @@ const row = (bill) => {
     </tr>
     `;
 };
+const antiChrono = (a, b) => (a.date < b.date ? 1 : -1);
 
 const rows = (data) => {
-  return data && data.length ? data.map((bill) => row(bill)).join('') : '';
+  return data && data.length ? data.sort(antiChrono).map((bill) => row(bill)).join('') : '';
 };
-
-const antiChrono = (a, b) => (a.date < b.date ? 1 : -1);
 
 export default ({ data: bills, loading, error }) => {
   const modal = () => `
@@ -70,7 +69,7 @@ export default ({ data: bills, loading, error }) => {
               </tr>
           </thead>
           <tbody data-testid="tbody">
-            ${rows(bills.sort(antiChrono))}
+            ${rows(bills)}
           </tbody>
           </table>
         </div>
